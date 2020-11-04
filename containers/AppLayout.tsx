@@ -8,19 +8,19 @@ const Layout: React.FC<any> = ({ children }) => {
   return (
     <>
       <div className='flex z-0 relative'>
-        {/* side nav */}
+        {/* side nav */ }
         <SideMenu />
         <div className='content'>
 
-          {/* content */}
-          <div style={{ minHeight: '60vh' }}>
-            {children}
+          {/* content */ }
+          <div style={ { minHeight: '60vh' } }>
+            { children }
           </div>
 
           <div className='border-t border-theme-50 my-5'></div>
 
-          {/* footer */}
-          <div className="flex mx-auto items-center" style={{ maxWidth: '1200px' }}>
+          {/* footer */ }
+          <div className="flex mx-auto items-center" style={ { maxWidth: '1200px' } }>
             <div className='w-64 cursor-pointer'>
               <Link href='/'>
                 <img src="/logo.png" alt="unknown" />
