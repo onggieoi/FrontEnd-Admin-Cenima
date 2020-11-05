@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.2.5",
+    "@types/recharts": "^1.8.16",
     "autoprefixer": "^9.8.5",
     "formik": "^2.1.5",
     "graphql": "^15.3.0",
@@ -26,6 +27,7 @@
     "react-notifications": "^1.7.2",
     "react-responsive-carousel": "^3.2.10",
     "react-select": "^3.1.0",
+    "recharts": "^1.8.5",
     "sass": "^1.26.10",
     "sweetalert2": "^9.17.1",
     "tailwindcss": "^1.5.2",

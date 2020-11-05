@@ -2,21 +2,21 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 
-import Dashboard from 'containers/Dashboard';
 import Layout from 'containers/AppLayout';
+import ScheduleContainer from 'containers/Schedule';
 
-const Home: NextPage = () => {
+const Schedule: NextPage = () => {
 
   return (
     <>
       <Head>
-        <title>Dashboard | UNKNOWN</title>
+        <title>Schedules | UNKNOWN</title>
       </Head>
       <Layout>
-        <Dashboard />
+        <ScheduleContainer />
       </Layout>
     </>
   );
 };
 
-export default Home;
+export default Schedule;

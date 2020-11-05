@@ -2,18 +2,18 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 
-import Dashboard from 'containers/Dashboard';
 import Layout from 'containers/AppLayout';
+import MoviePage from 'containers/Movie';
 
 const Home: NextPage = () => {
 
   return (
     <>
       <Head>
-        <title>Dashboard | UNKNOWN</title>
+        <title>Movies | UNKNOWN</title>
       </Head>
       <Layout>
-        <Dashboard />
+        <MoviePage />
       </Layout>
     </>
   );

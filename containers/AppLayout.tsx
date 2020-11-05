@@ -13,14 +13,16 @@ const Layout: React.FC<any> = ({ children }) => {
         <div className='content'>
 
           {/* content */ }
-          <div style={ { minHeight: '60vh' } }>
+          <div style={ { minHeight: '85vh' } }>
             { children }
           </div>
 
-          <div className='border-t border-theme-50 my-5'></div>
+          <div className='border-t border-theme-50 pt-10 text-center font-bold'>
+            Dashboard::<a href="https://github.com/onggieoi">onggieoi@github.com</a>
+          </div>
 
           {/* footer */ }
-          <div className="flex mx-auto items-center" style={ { maxWidth: '1200px' } }>
+          {/* <div className="flex mx-auto items-center" style={ { maxWidth: '1200px' } }>
             <div className='w-64 cursor-pointer'>
               <Link href='/'>
                 <img src="/logo.png" alt="unknown" />
@@ -41,7 +43,7 @@ const Layout: React.FC<any> = ({ children }) => {
               <div>Email hỗ trợ: hoidap@unknown.io</div>
             </div>
           </div>
-          <div className='text-center font-bold'>COPYRIGHT 2020 UNKNOWN. All RIGHTS RESERVED .</div>
+          <div className='text-center font-bold'>COPYRIGHT 2020 UNKNOWN. All RIGHTS RESERVED .</div> */}
         </div>
       </div>
     </>

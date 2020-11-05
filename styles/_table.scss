@@ -1,5 +1,5 @@
 .table {
-    @apply w-full text-left;
+    @apply w-full text-left bg-theme-50 p-5 rounded-lg;
 
     th {
         @apply font-medium px-5 py-3;

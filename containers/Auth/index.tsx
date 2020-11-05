@@ -5,15 +5,16 @@ import { NotificationContainer } from 'react-notifications';
 import { AuthContext } from 'contexts/Auth';
 
 const Auth: React.FC<any> = ({ children }) => {
-	const { isAuth } = useContext(AuthContext);
+	// const { isAuth } = useContext(AuthContext);
+	const isAuth = true;
 
 	const router = useRouter();
 
-	// useEffect(() => {
-	//   if (!isAuth) {
-	//     router.push('/login');
-	//   }
-	// }, [isAuth]);
+	useEffect(() => {
+		if (!isAuth) {
+			router.push('/login');
+		}
+	}, [isAuth]);
 
 	return (
 		<>

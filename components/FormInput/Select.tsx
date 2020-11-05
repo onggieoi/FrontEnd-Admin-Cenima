@@ -1,11 +1,7 @@
 import React, { InputHTMLAttributes } from 'react';
 import { useField } from 'formik';
 import Select from 'react-select';
-
-export type DataType = {
-  value: string;
-  label: string;
-};
+import { DataType } from 'interfaces';
 
 type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string;
@@ -21,19 +17,19 @@ const MultiSelectField: React.FC<InputFieldProps> = (props) => {
 
   return (
     <div className='mb-3'>
-      <label>{props.label}: </label>
+      <label>{ props.label }: </label>
       <Select
-        isMulti={props.isMulti}
-        name={props.name}
-        options={props.data}
+        isMulti={ props.isMulti }
+        name={ props.name }
+        options={ props.data }
         className="basic-multi-select"
         classNamePrefix="select"
-        value={value}
-        onChange={(val) => setValue(val)}
+        value={ value }
+        onChange={ (val) => setValue(val) }
       />
       {
         touched && error ? (
-          <span className='text-theme-6 text-center ml-5'>{error}</span>
+          <span className='text-theme-6 text-center ml-5'>{ error }</span>
         ) : null
       }
     </div>

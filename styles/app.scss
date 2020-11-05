@@ -77,6 +77,10 @@ body {
   top: 10px !important;
 }
 
+.react-datepicker__month-container {
+  z-index: 50;
+}
+
 @-webkit-keyframes spinner {
   0% {
     -webkit-transform: rotate(0deg);
@@ -102,6 +106,7 @@ body {
   overflow: hidden;
   background: linear-gradient(0deg, rgba(252, 210, 250, 1) 0%, rgba(249, 123, 242, 1) 30%, rgba(247, 229, 245, 1) 100%);
 }
+
 .shim-green::after {
   position: absolute;
   top: 0;
@@ -109,12 +114,10 @@ body {
   bottom: 0;
   left: 0;
   transform: translateX(-100%);
-  background-image: linear-gradient(
-    90deg,
-    rgba(233, 233, 233, 1) 0,
-    rgba(233, 233, 233, 0.9) 50%,
-    rgba(233, 233, 233, 0.8) 100%
-  );
+  background-image: linear-gradient(90deg,
+      rgba(233, 233, 233, 1) 0,
+      rgba(233, 233, 233, 0.9) 50%,
+      rgba(233, 233, 233, 0.8) 100%);
   animation: shimmer 1s ease-out infinite;
   content: "";
 }
