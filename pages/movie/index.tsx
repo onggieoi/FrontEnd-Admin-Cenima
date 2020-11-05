@@ -5,6 +5,7 @@ import Head from 'next/head';
 import Layout from 'containers/AppLayout';
 import MoviePage from 'containers/Movie';
 
+
 const Home: NextPage = () => {
 
   return (

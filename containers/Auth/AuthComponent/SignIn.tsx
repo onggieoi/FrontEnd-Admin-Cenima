@@ -41,12 +41,12 @@ const SignIn = () => {
             }
           }).then(({ data }) => {
             if (data?.userSignIn?.user) {
-
               NotificationManager.success(
                 `Welcome back ${data.userSignIn.user.fullname}`,
                 'Login Successfull',
                 2000,
               );
+
               login();
             } else {
               actions.setStatus('Invalid username or password');

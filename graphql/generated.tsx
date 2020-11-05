@@ -185,6 +185,19 @@ export type BuyTicketInput = {
   location: Scalars['String'];
 };
 
+export type CreateMovieInput = {
+  name: Scalars['String'];
+  description: Scalars['String'];
+  type: Scalars['String'];
+  director: Scalars['String'];
+  producer: Scalars['String'];
+  country: Scalars['String'];
+  duration: Scalars['Int'];
+  thumbnail: Scalars['String'];
+  isShow: Scalars['Boolean'];
+  images: Array<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<UserRespone>;
@@ -196,6 +209,7 @@ export type Query = {
   movie: ResponeMovie;
   getTimesSession: Array<ScheduleTime>;
   seats: Array<SeatRespone>;
+  movies: Array<Movie>;
 };
 
 
@@ -221,6 +235,8 @@ export type Mutation = {
   customerSignIn?: Maybe<CustomerRespone>;
   logout: Scalars['Boolean'];
   buyTicket: Scalars['Boolean'];
+  createMovie: Scalars['Boolean'];
+  deleteMovie: Scalars['Boolean'];
 };
 
 
@@ -247,6 +263,36 @@ export type MutationCustomerSignInArgs = {
 export type MutationBuyTicketArgs = {
   options: BuyTicketInput;
 };
+
+
+export type MutationCreateMovieArgs = {
+  data: CreateMovieInput;
+};
+
+
+export type MutationDeleteMovieArgs = {
+  id: Scalars['Int'];
+};
+
+export type CreateMovieMutationVariables = Exact<{
+  data: CreateMovieInput;
+}>;
+
+
+export type CreateMovieMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createMovie'>
+);
+
+export type DeleteMovieMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteMovieMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteMovie'>
+);
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -292,7 +338,105 @@ export type MeQuery = (
   )> }
 );
 
+export type MovieQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
 
+
+export type MovieQuery = (
+  { __typename?: 'Query' }
+  & { movie: (
+    { __typename?: 'ResponeMovie' }
+    & { movie?: Maybe<(
+      { __typename?: 'Movie' }
+      & Pick<Movie, 'id' | 'name' | 'description' | 'type' | 'director' | 'producer' | 'country' | 'duration' | 'thumbnail' | 'isShow'>
+      & { images?: Maybe<Array<(
+        { __typename?: 'Image' }
+        & Pick<Image, 'url'>
+      )>> }
+    )>, error?: Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'message'>
+    )> }
+  ) }
+);
+
+export type MoviesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MoviesQuery = (
+  { __typename?: 'Query' }
+  & { movies: Array<(
+    { __typename?: 'Movie' }
+    & Pick<Movie, 'id' | 'name' | 'duration' | 'isShow'>
+    & { images?: Maybe<Array<(
+      { __typename?: 'Image' }
+      & Pick<Image, 'url'>
+    )>> }
+  )> }
+);
+
+
+export const CreateMovieDocument = gql`
+    mutation CreateMovie($data: CreateMovieInput!) {
+  createMovie(data: $data)
+}
+    `;
+export type CreateMovieMutationFn = Apollo.MutationFunction<CreateMovieMutation, CreateMovieMutationVariables>;
+
+/**
+ * __useCreateMovieMutation__
+ *
+ * To run a mutation, you first call `useCreateMovieMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMovieMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMovieMutation, { data, loading, error }] = useCreateMovieMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateMovieMutation(baseOptions?: Apollo.MutationHookOptions<CreateMovieMutation, CreateMovieMutationVariables>) {
+        return Apollo.useMutation<CreateMovieMutation, CreateMovieMutationVariables>(CreateMovieDocument, baseOptions);
+      }
+export type CreateMovieMutationHookResult = ReturnType<typeof useCreateMovieMutation>;
+export type CreateMovieMutationResult = Apollo.MutationResult<CreateMovieMutation>;
+export type CreateMovieMutationOptions = Apollo.BaseMutationOptions<CreateMovieMutation, CreateMovieMutationVariables>;
+export const DeleteMovieDocument = gql`
+    mutation DeleteMovie($id: Int!) {
+  deleteMovie(id: $id)
+}
+    `;
+export type DeleteMovieMutationFn = Apollo.MutationFunction<DeleteMovieMutation, DeleteMovieMutationVariables>;
+
+/**
+ * __useDeleteMovieMutation__
+ *
+ * To run a mutation, you first call `useDeleteMovieMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteMovieMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteMovieMutation, { data, loading, error }] = useDeleteMovieMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteMovieMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMovieMutation, DeleteMovieMutationVariables>) {
+        return Apollo.useMutation<DeleteMovieMutation, DeleteMovieMutationVariables>(DeleteMovieDocument, baseOptions);
+      }
+export type DeleteMovieMutationHookResult = ReturnType<typeof useDeleteMovieMutation>;
+export type DeleteMovieMutationResult = Apollo.MutationResult<DeleteMovieMutation>;
+export type DeleteMovieMutationOptions = Apollo.BaseMutationOptions<DeleteMovieMutation, DeleteMovieMutationVariables>;
 export const LogoutDocument = gql`
     mutation Logout {
   logout
@@ -402,3 +546,92 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const MovieDocument = gql`
+    query Movie($id: Int!) {
+  movie(id: $id) {
+    movie {
+      id
+      name
+      description
+      type
+      director
+      producer
+      country
+      duration
+      thumbnail
+      isShow
+      images {
+        url
+      }
+    }
+    error {
+      field
+      message
+    }
+  }
+}
+    `;
+
+/**
+ * __useMovieQuery__
+ *
+ * To run a query within a React component, call `useMovieQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMovieQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMovieQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMovieQuery(baseOptions?: Apollo.QueryHookOptions<MovieQuery, MovieQueryVariables>) {
+        return Apollo.useQuery<MovieQuery, MovieQueryVariables>(MovieDocument, baseOptions);
+      }
+export function useMovieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MovieQuery, MovieQueryVariables>) {
+          return Apollo.useLazyQuery<MovieQuery, MovieQueryVariables>(MovieDocument, baseOptions);
+        }
+export type MovieQueryHookResult = ReturnType<typeof useMovieQuery>;
+export type MovieLazyQueryHookResult = ReturnType<typeof useMovieLazyQuery>;
+export type MovieQueryResult = Apollo.QueryResult<MovieQuery, MovieQueryVariables>;
+export const MoviesDocument = gql`
+    query Movies {
+  movies {
+    id
+    name
+    duration
+    isShow
+    images {
+      url
+    }
+  }
+}
+    `;
+
+/**
+ * __useMoviesQuery__
+ *
+ * To run a query within a React component, call `useMoviesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMoviesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMoviesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMoviesQuery(baseOptions?: Apollo.QueryHookOptions<MoviesQuery, MoviesQueryVariables>) {
+        return Apollo.useQuery<MoviesQuery, MoviesQueryVariables>(MoviesDocument, baseOptions);
+      }
+export function useMoviesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MoviesQuery, MoviesQueryVariables>) {
+          return Apollo.useLazyQuery<MoviesQuery, MoviesQueryVariables>(MoviesDocument, baseOptions);
+        }
+export type MoviesQueryHookResult = ReturnType<typeof useMoviesQuery>;
+export type MoviesLazyQueryHookResult = ReturnType<typeof useMoviesLazyQuery>;
+export type MoviesQueryResult = Apollo.QueryResult<MoviesQuery, MoviesQueryVariables>;

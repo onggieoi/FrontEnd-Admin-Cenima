@@ -2,7 +2,7 @@ export interface TableItem {
   id: number;
   name: string;
   subName?: string;
-  images: string[];
+  images: any[];
   status?: boolean;
   during: number;
   session?: string;
@@ -29,13 +29,14 @@ export type DataType = {
 };
 
 export interface InitialFormMovie {
-  id: number;
+  isShow: boolean;
+  id?: number;
   name: string;
   description: string;
   type: DataType[];
   director: string;
   producer: string;
-  country: DataType[],
+  country: DataType,
   duration: number,
   thumbnail: string[],
   images: string[],

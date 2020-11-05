@@ -11,7 +11,7 @@ interface AuthContext {
 export const AuthContext = createContext({} as AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const [isAuth, setAuth] = useState(false);
+  const [isAuth, setAuth] = useState(true);
 
   const { data, refetch, } = useMeQuery({
     onCompleted: () => {

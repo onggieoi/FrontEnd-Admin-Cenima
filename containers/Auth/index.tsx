@@ -5,8 +5,7 @@ import { NotificationContainer } from 'react-notifications';
 import { AuthContext } from 'contexts/Auth';
 
 const Auth: React.FC<any> = ({ children }) => {
-	// const { isAuth } = useContext(AuthContext);
-	const isAuth = true;
+	const { isAuth } = useContext(AuthContext);
 
 	const router = useRouter();
 
@@ -19,7 +18,7 @@ const Auth: React.FC<any> = ({ children }) => {
 	return (
 		<>
 			<NotificationContainer />
-			{children }
+			{children}
 		</>
 	)
 };

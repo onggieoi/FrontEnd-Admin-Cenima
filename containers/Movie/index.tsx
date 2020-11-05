@@ -1,33 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import {
   Search,
 } from 'react-feather';
-import Table from 'components/Table';
-import { TableItem } from 'interfaces';
-import Link from 'next/link';
+import { NotificationManager } from 'react-notifications';
 
-const cols = ['iamges', 'name', 'during', 'status']
-const dataEx: TableItem[] = [
-  {
-    id: 1,
-    name: 'King',
-    subName: 'King Lion',
-    images: ['', '', ''],
-    status: true,
-    during: 164,
-  },
-  {
-    id: 2,
-    name: 'Queen',
-    subName: 'Queen Rambit',
-    images: ['', '', ''],
-    status: false,
-    during: 164,
-  }
-]
+import Table from 'components/Table';
+import { useDeleteMovieMutation, useMoviesQuery } from 'graphql/generated';
+
+const cols = ['iamges', 'name', 'during', 'status'];
 
 const CustomersPage = () => {
-  const [data, setData] = useState(dataEx);
+  const [dataTable, setData] = useState([] as any[]);
+
+  const { data, loading, refetch } = useMoviesQuery();
+  const [deleteMovie] = useDeleteMovieMutation();
+
+  useEffect(() => {
+    const mapper = data?.movies.map(({ id, name, images, isShow, duration }) => ({
+      id, name,
+      images,
+      subName: 'King Lion',
+      status: isShow,
+      during: duration,
+    }));
+    setData(mapper || []);
+  }, [data]);
+
+  const handleDelete = (id: number) => {
+    deleteMovie({
+      variables: { id }
+    }).then(async ({ data }) => {
+      if (data) {
+        NotificationManager.success(
+          `Deleted movie ${id}`,
+          'Delete Successfull',
+          2000,
+        );
+      } else {
+        NotificationManager.error(
+          `something wrong with ${id}`,
+          'Delete failed',
+          2000,
+        );
+      }
+      await refetch();
+    });
+  }
 
   return (
     <>
@@ -53,7 +72,7 @@ const CustomersPage = () => {
         </div>
 
         <div className="intro-y col-span-12 overflow-auto lg:overflow-visible">
-          <Table Cols={ cols } Data={ data } type={ 'movie' } />
+          <Table Cols={cols} Data={dataTable} type={'movie'} deleteFn={handleDelete} />
         </div>
       </div>
     </>
