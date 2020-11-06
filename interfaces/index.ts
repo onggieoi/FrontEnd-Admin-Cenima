@@ -38,18 +38,17 @@ export interface InitialFormMovie {
   producer: string;
   country: DataType,
   duration: number,
-  thumbnail: string[],
+  thumbnail: string,
   images: string[],
 }
 
 export interface InitialFormSchedule {
   id: number;
-  dateId: number;
-  theaterId: number;
-  movieId: number;
-  location: string;
   time: number;
   date: string;
-  movie: string;
   theater: string;
+  theaterId: number;
+  movieId: number;
+  movie: string;
+  location: string;
 }

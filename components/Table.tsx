@@ -8,7 +8,7 @@ interface Props {
   type: string;
   Data: TableItem[];
   Cols: string[];
-  deleteFn: Function;
+  deleteFn?: Function;
 }
 
 const Table: React.FC<Props> = ({ Cols, Data, type, deleteFn }) => {
@@ -24,8 +24,8 @@ const Table: React.FC<Props> = ({ Cols, Data, type, deleteFn }) => {
       <thead>
         <tr>
           {
-            Cols.map((col) => (
-              <th className="whitespace-no-wrap uppercase text-center text-lg">{col}</th>
+            Cols.map((col, index) => (
+              <th key={ index } className="whitespace-no-wrap uppercase text-center text-lg">{ col }</th>
             ))
           }
           <th className="whitespace-no-wrap uppercase text-center">actions</th>
@@ -34,30 +34,30 @@ const Table: React.FC<Props> = ({ Cols, Data, type, deleteFn }) => {
       <tbody>
         {
           Data ? Data.map((item) => (
-            <tr className="intro-x" key={item.id}>
+            <tr className="intro-x" key={ item.id }>
               <td>
                 <div className="flex pl-5 justify-center">
                   {
-                    item.images.map((url, index) => (
-                      <div key={index} className="w-10 h-10 image-fit zoom-in -ml-5">
-                        <img className="tooltip rounded-full" src={`${url || '/preview-4.jpg'}`} />
+                    item.images.map((img, index) => (
+                      <div key={ index } className="w-10 h-10 image-fit zoom-in -ml-5">
+                        <img className="tooltip rounded-full h-full object-cover" src={ `${img || '/preview-4.jpg'}` } />
                       </div>
                     ))
                   }
                 </div>
               </td>
               <td className='text-center'>
-                <Link href={`${type}/${item.id}`}>
-                  <div className="font-medium whitespace-no-wrap cursor-pointer">{item.name}</div>
+                <Link href={ `${type}/${item.id}` }>
+                  <div className="font-medium whitespace-no-wrap cursor-pointer">{ item.name }</div>
                 </Link>
-                <div className="text-gray-600 text-xs whitespace-no-wrap">{item.subName}</div>
+                <div className="text-gray-600 text-xs whitespace-no-wrap">{ item.subName }</div>
               </td>
-              <td className="text-center">{item.during}</td>
+              <td className="text-center">{ item.during }</td>
               {
                 typeof item.status === 'boolean' && (
                   <td>
-                    <div className={`flex items-center justify-center ${ActiveClass(item.status)}`}>
-                      <CheckSquare />{item.status ? 'Showing' : 'Comming Soon'}
+                    <div className={ `flex items-center justify-center ${ActiveClass(item.status)}` }>
+                      <CheckSquare />{ item.status ? 'Showing' : 'Comming Soon' }
                     </div>
                   </td>
                 )
@@ -65,29 +65,32 @@ const Table: React.FC<Props> = ({ Cols, Data, type, deleteFn }) => {
               {
                 item.session && (
                   <td className='text-center'>
-                    <div className="font-bold whitespace-no-wrap">{item.session}</div>
+                    <div className="font-bold whitespace-no-wrap">{ item.session }</div>
                   </td>
                 )
               }
               {
                 item.room && (
                   <td className='text-center'>
-                    <div className="font-bold whitespace-no-wrap">{item.room}</div>
+                    <div className="font-bold whitespace-no-wrap">{ item.room }</div>
                   </td>
                 )
               }
               <td className="table-report__action w-56">
                 <div className="flex items-center justify-center">
-                  <Link href={`${type}/${item.id}`}>
+                  <Link href={ `${type}/${item.id}` }>
                     <button className="flex items-center mr-3">
                       <CheckSquare />Edit
                     </button>
                   </Link>
 
-                  <button onClick={() => deleteFn(item.id)}
-                    className="flex items-center text-theme-6">
-                    <Trash2 />Delete
-                  </button>
+                  {
+                    deleteFn && (
+                      <button onClick={ () => deleteFn(item.id) }
+                        className="flex items-center text-theme-6">
+                        <Trash2 />Delete
+                      </button>
+                    ) }
                 </div>
               </td>
             </tr>

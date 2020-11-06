@@ -5,6 +5,7 @@ import Select from 'react-select';
 import { InitialFormSchedule, DataType } from 'interfaces';
 import { cinemaOptions } from 'helper/constant';
 import { formatDate, formatTime } from 'helper/functions';
+import { useMoviesOptionQuery, useTheaterOptionsQuery } from 'graphql/generated';
 
 type Props = {
   initialForm?: InitialFormSchedule;
@@ -54,12 +55,21 @@ const FormComponent: React.FC<Props> = ({ initialForm }) => {
     return {} as DataType;
   });
 
+  const { data } = useMoviesOptionQuery();
+  const { data: theaters } = useTheaterOptionsQuery({
+    variables: {
+      location: cinema?.value || ''
+    }
+  });
+
   const handleSubmit = () => {
     setLoading(true);
 
     setTimeout(() => {
-      console.log(formatDate(date), formatTime(time.getTime()));
-      console.log(date.getTime(), time.getTime());
+      console.log(formatDate(date), formatTime(time.getTime().toString()));
+      console.log(time.getTime().toString());
+      console.log(theater, movie, cinema);
+
 
       setLoading(false);
     }, 1000);
@@ -73,6 +83,7 @@ const FormComponent: React.FC<Props> = ({ initialForm }) => {
           <div className='text-left font-bold text-lg w-24'>Date: </div>
           <DatePicker
             className='input border w-64 z-50 text-center'
+            dateFormat='dd/MM/yyyy'
             selected={ date }
             onChange={ (date: Date) => setDate(date) }
             minDate={ new Date() }
@@ -92,55 +103,43 @@ const FormComponent: React.FC<Props> = ({ initialForm }) => {
         </div>
 
         {/* Theater */ }
-        {
-          cinema && (
-            <div className='flex items-center justify-center mt-5'>
-              <div className='text-left font-bold text-lg w-24'>Theater: </div>
-              <Select
-                value={ theater }
-                placeholder="Choose Theater"
-                className='w-64'
-                options={ cinemaOptions }
-                onChange={ (c: any) => setTheater(c) }
-              />
-            </div>
-          )
-        }
+        <div className='flex items-center justify-center mt-5'>
+          <div className='text-left font-bold text-lg w-24'>Theater: </div>
+          <Select
+            value={ theater }
+            placeholder="Choose Theater"
+            className='w-64'
+            options={ theaters?.theaterOptions.map((item) => ({ label: item.name, value: item.id })) }
+            onChange={ (c: any) => setTheater(c) }
+          />
+        </div>
 
         {/* Movie */ }
-        {
-          theater && (
-            <div className='flex items-center justify-center mt-5'>
-              <div className='text-left font-bold text-lg w-24'>Movie: </div>
-              <Select
-                value={ movie }
-                className='w-64'
-                placeholder="Choose Movie"
-                options={ cinemaOptions }
-                onChange={ (c: any) => setMovie(c) }
-              />
-            </div>
-          )
-        }
+        <div className='flex items-center justify-center mt-5'>
+          <div className='text-left font-bold text-lg w-24'>Movie: </div>
+          <Select
+            value={ movie }
+            className='w-64'
+            placeholder="Choose Movie"
+            options={ data?.moviesOption.map((item) => ({ label: item.name, value: item.id })) }
+            onChange={ (c: any) => setMovie(c) }
+          />
+        </div>
 
         {/* Date */ }
-        {
-          movie && (
-            <div className='flex items-center justify-center mt-5'>
-              <div className='text-left font-bold text-lg w-24'>Time: </div>
-              <DatePicker
-                className='input border w-64 z-50 text-center'
-                selected={ time }
-                onChange={ (date: Date) => setTime(date) }
-                showTimeSelect
-                showTimeSelectOnly
-                timeIntervals={ 15 }
-                timeCaption="Time"
-                dateFormat="h:mm aa"
-              />
-            </div>
-          )
-        }
+        <div className='flex items-center justify-center mt-5'>
+          <div className='text-left font-bold text-lg w-24'>Time: </div>
+          <DatePicker
+            className='input border w-64 z-50 text-center'
+            selected={ time }
+            onChange={ (date: Date) => setTime(date) }
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={ 15 }
+            timeCaption="Time"
+            dateFormat="h:mm aa"
+          />
+        </div>
 
         <div className='mx-auto' style={ { width: '24rem' } }>
           <button onClick={ handleSubmit }

@@ -1,11 +1,24 @@
-import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
+
+import { InitialFormSchedule } from 'interfaces';
 import FormComponent from './Form';
 
-const DetailPage = () => {
-  const router = useRouter();
+type Props = {
+  schedule: any
+}
 
-  console.log(router.query?.id);
+const DetailPage: React.FC<Props> = ({ schedule }) => {
+  const { id, time, scheduleDate, theater, movie, location } = schedule;
+
+  const [initValues] = useState({
+    id, location,
+    time: Number(time),
+    date: scheduleDate.date,
+    theater: theater.name,
+    theaterId: theater.id,
+    movieId: movie.id,
+    movie: movie.name,
+  } as InitialFormSchedule);
 
   return (
     <>
@@ -16,17 +29,7 @@ const DetailPage = () => {
       </div>
 
       <div className='p-5 mx-auto' style={ { width: '1500px' } }>
-        <FormComponent initialForm={ {
-          id: 1,
-          dateId: 1,
-          theaterId: 1,
-          movieId: 1,
-          location: 'hochiminh',
-          time: 123456,
-          date: '11/20/2020',
-          movie: 'kinggg',
-          theater: 'first',
-        } } />
+        <FormComponent initialForm={ initValues } />
       </div>
     </>
   );

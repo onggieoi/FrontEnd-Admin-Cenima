@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   Search,
@@ -7,6 +7,7 @@ import { NotificationManager } from 'react-notifications';
 
 import Table from 'components/Table';
 import { useDeleteMovieMutation, useMoviesQuery } from 'graphql/generated';
+import Loading from 'components/Loading';
 
 const cols = ['iamges', 'name', 'during', 'status'];
 
@@ -16,10 +17,12 @@ const CustomersPage = () => {
   const { data, loading, refetch } = useMoviesQuery();
   const [deleteMovie] = useDeleteMovieMutation();
 
+  const refetchCustom = useCallback(() => { setTimeout(async () => await refetch(), 200) }, [refetch]);
+
   useEffect(() => {
     const mapper = data?.movies.map(({ id, name, images, isShow, duration }) => ({
       id, name,
-      images,
+      images: images?.map(({ url }) => url),
       subName: 'King Lion',
       status: isShow,
       during: duration,
@@ -30,8 +33,8 @@ const CustomersPage = () => {
   const handleDelete = (id: number) => {
     deleteMovie({
       variables: { id }
-    }).then(async ({ data }) => {
-      if (data) {
+    }).then(({ data }) => {
+      if (data?.deleteMovie) {
         NotificationManager.success(
           `Deleted movie ${id}`,
           'Delete Successfull',
@@ -44,7 +47,8 @@ const CustomersPage = () => {
           2000,
         );
       }
-      await refetch();
+
+      refetchCustom();
     });
   }
 
@@ -72,8 +76,16 @@ const CustomersPage = () => {
         </div>
 
         <div className="intro-y col-span-12 overflow-auto lg:overflow-visible">
-          <Table Cols={cols} Data={dataTable} type={'movie'} deleteFn={handleDelete} />
+          <Table Cols={ cols } Data={ dataTable } type={ 'movie' } deleteFn={ handleDelete } />
         </div>
+
+        {
+          loading && (
+            <div className='absolute' style={ { top: 10, left: '50%' } }>
+              <Loading />
+            </div>
+          )
+        }
       </div>
     </>
   );

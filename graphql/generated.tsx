@@ -17,7 +17,6 @@ export type ScheduleDate = {
   __typename?: 'ScheduleDate';
   id: Scalars['Int'];
   date: Scalars['String'];
-  percent: Scalars['Int'];
 };
 
 export type Image = {
@@ -50,7 +49,10 @@ export type ScheduleTime = {
   theaterId: Scalars['Int'];
   theater?: Maybe<Theater>;
   scheduleDateId: Scalars['Int'];
+  scheduleDate: ScheduleDate;
   movieId: Scalars['Int'];
+  movie?: Maybe<Movie>;
+  location: Scalars['String'];
 };
 
 export type Customer = {
@@ -147,6 +149,12 @@ export type SeatRespone = {
   isAvailable?: Maybe<Scalars['Boolean']>;
 };
 
+export type ScheduleRespone = {
+  __typename?: 'ScheduleRespone';
+  schedule?: Maybe<ScheduleTime>;
+  error?: Maybe<Scalars['Boolean']>;
+};
+
 export type SignUpInput = {
   username: Scalars['String'];
   password: Scalars['String'];
@@ -186,6 +194,7 @@ export type BuyTicketInput = {
 };
 
 export type CreateMovieInput = {
+  id?: Maybe<Scalars['Int']>;
   name: Scalars['String'];
   description: Scalars['String'];
   type: Scalars['String'];
@@ -196,6 +205,20 @@ export type CreateMovieInput = {
   thumbnail: Scalars['String'];
   isShow: Scalars['Boolean'];
   images: Array<Scalars['String']>;
+};
+
+export type CreateScheduleInput = {
+  date: Scalars['String'];
+  location: Scalars['String'];
+  theaterId: Scalars['Int'];
+  movieId: Scalars['Int'];
+  time: Scalars['String'];
+  price: Scalars['Int'];
+};
+
+export type QuerySchedulesInput = {
+  date: Scalars['String'];
+  location?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -210,6 +233,10 @@ export type Query = {
   getTimesSession: Array<ScheduleTime>;
   seats: Array<SeatRespone>;
   movies: Array<Movie>;
+  ListSchedules: Array<ScheduleTime>;
+  schedule?: Maybe<ScheduleRespone>;
+  moviesOption: Array<Movie>;
+  theaterOptions: Array<Theater>;
 };
 
 
@@ -227,6 +254,21 @@ export type QuerySeatsArgs = {
   options: InputGetSeat;
 };
 
+
+export type QueryListSchedulesArgs = {
+  data: QuerySchedulesInput;
+};
+
+
+export type QueryScheduleArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryTheaterOptionsArgs = {
+  location: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   userSignUp?: Maybe<UserRespone>;
@@ -237,6 +279,7 @@ export type Mutation = {
   buyTicket: Scalars['Boolean'];
   createMovie: Scalars['Boolean'];
   deleteMovie: Scalars['Boolean'];
+  createSchedule: Scalars['Boolean'];
 };
 
 
@@ -272,6 +315,11 @@ export type MutationCreateMovieArgs = {
 
 export type MutationDeleteMovieArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationCreateScheduleArgs = {
+  data: CreateScheduleInput;
 };
 
 export type CreateMovieMutationVariables = Exact<{
@@ -352,13 +400,24 @@ export type MovieQuery = (
       & Pick<Movie, 'id' | 'name' | 'description' | 'type' | 'director' | 'producer' | 'country' | 'duration' | 'thumbnail' | 'isShow'>
       & { images?: Maybe<Array<(
         { __typename?: 'Image' }
-        & Pick<Image, 'url'>
+        & Pick<Image, 'url' | 'id'>
       )>> }
     )>, error?: Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'message'>
     )> }
   ) }
+);
+
+export type MoviesOptionQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MoviesOptionQuery = (
+  { __typename?: 'Query' }
+  & { moviesOption: Array<(
+    { __typename?: 'Movie' }
+    & Pick<Movie, 'id' | 'name'>
+  )> }
 );
 
 export type MoviesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -373,6 +432,66 @@ export type MoviesQuery = (
       { __typename?: 'Image' }
       & Pick<Image, 'url'>
     )>> }
+  )> }
+);
+
+export type ScheduleQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type ScheduleQuery = (
+  { __typename?: 'Query' }
+  & { schedule?: Maybe<(
+    { __typename?: 'ScheduleRespone' }
+    & Pick<ScheduleRespone, 'error'>
+    & { schedule?: Maybe<(
+      { __typename?: 'ScheduleTime' }
+      & Pick<ScheduleTime, 'id' | 'time' | 'location'>
+      & { scheduleDate: (
+        { __typename?: 'ScheduleDate' }
+        & Pick<ScheduleDate, 'date'>
+      ), theater?: Maybe<(
+        { __typename?: 'Theater' }
+        & Pick<Theater, 'id' | 'name'>
+      )>, movie?: Maybe<(
+        { __typename?: 'Movie' }
+        & Pick<Movie, 'id' | 'name'>
+      )> }
+    )> }
+  )> }
+);
+
+export type ListSchedulesQueryVariables = Exact<{
+  data: QuerySchedulesInput;
+}>;
+
+
+export type ListSchedulesQuery = (
+  { __typename?: 'Query' }
+  & { ListSchedules: Array<(
+    { __typename?: 'ScheduleTime' }
+    & Pick<ScheduleTime, 'id' | 'time'>
+    & { movie?: Maybe<(
+      { __typename?: 'Movie' }
+      & Pick<Movie, 'id' | 'name' | 'thumbnail' | 'duration'>
+    )>, theater?: Maybe<(
+      { __typename?: 'Theater' }
+      & Pick<Theater, 'name'>
+    )> }
+  )> }
+);
+
+export type TheaterOptionsQueryVariables = Exact<{
+  location: Scalars['String'];
+}>;
+
+
+export type TheaterOptionsQuery = (
+  { __typename?: 'Query' }
+  & { theaterOptions: Array<(
+    { __typename?: 'Theater' }
+    & Pick<Theater, 'id' | 'name'>
   )> }
 );
 
@@ -562,6 +681,7 @@ export const MovieDocument = gql`
       isShow
       images {
         url
+        id
       }
     }
     error {
@@ -597,6 +717,39 @@ export function useMovieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Movi
 export type MovieQueryHookResult = ReturnType<typeof useMovieQuery>;
 export type MovieLazyQueryHookResult = ReturnType<typeof useMovieLazyQuery>;
 export type MovieQueryResult = Apollo.QueryResult<MovieQuery, MovieQueryVariables>;
+export const MoviesOptionDocument = gql`
+    query MoviesOption {
+  moviesOption {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useMoviesOptionQuery__
+ *
+ * To run a query within a React component, call `useMoviesOptionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMoviesOptionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMoviesOptionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMoviesOptionQuery(baseOptions?: Apollo.QueryHookOptions<MoviesOptionQuery, MoviesOptionQueryVariables>) {
+        return Apollo.useQuery<MoviesOptionQuery, MoviesOptionQueryVariables>(MoviesOptionDocument, baseOptions);
+      }
+export function useMoviesOptionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MoviesOptionQuery, MoviesOptionQueryVariables>) {
+          return Apollo.useLazyQuery<MoviesOptionQuery, MoviesOptionQueryVariables>(MoviesOptionDocument, baseOptions);
+        }
+export type MoviesOptionQueryHookResult = ReturnType<typeof useMoviesOptionQuery>;
+export type MoviesOptionLazyQueryHookResult = ReturnType<typeof useMoviesOptionLazyQuery>;
+export type MoviesOptionQueryResult = Apollo.QueryResult<MoviesOptionQuery, MoviesOptionQueryVariables>;
 export const MoviesDocument = gql`
     query Movies {
   movies {
@@ -635,3 +788,129 @@ export function useMoviesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Mov
 export type MoviesQueryHookResult = ReturnType<typeof useMoviesQuery>;
 export type MoviesLazyQueryHookResult = ReturnType<typeof useMoviesLazyQuery>;
 export type MoviesQueryResult = Apollo.QueryResult<MoviesQuery, MoviesQueryVariables>;
+export const ScheduleDocument = gql`
+    query Schedule($id: Int!) {
+  schedule(id: $id) {
+    schedule {
+      id
+      time
+      location
+      scheduleDate {
+        date
+      }
+      theater {
+        id
+        name
+      }
+      movie {
+        id
+        name
+      }
+    }
+    error
+  }
+}
+    `;
+
+/**
+ * __useScheduleQuery__
+ *
+ * To run a query within a React component, call `useScheduleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useScheduleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useScheduleQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useScheduleQuery(baseOptions?: Apollo.QueryHookOptions<ScheduleQuery, ScheduleQueryVariables>) {
+        return Apollo.useQuery<ScheduleQuery, ScheduleQueryVariables>(ScheduleDocument, baseOptions);
+      }
+export function useScheduleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleQuery, ScheduleQueryVariables>) {
+          return Apollo.useLazyQuery<ScheduleQuery, ScheduleQueryVariables>(ScheduleDocument, baseOptions);
+        }
+export type ScheduleQueryHookResult = ReturnType<typeof useScheduleQuery>;
+export type ScheduleLazyQueryHookResult = ReturnType<typeof useScheduleLazyQuery>;
+export type ScheduleQueryResult = Apollo.QueryResult<ScheduleQuery, ScheduleQueryVariables>;
+export const ListSchedulesDocument = gql`
+    query ListSchedules($data: QuerySchedulesInput!) {
+  ListSchedules(data: $data) {
+    id
+    time
+    movie {
+      id
+      name
+      thumbnail
+      duration
+    }
+    theater {
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useListSchedulesQuery__
+ *
+ * To run a query within a React component, call `useListSchedulesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListSchedulesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListSchedulesQuery({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useListSchedulesQuery(baseOptions?: Apollo.QueryHookOptions<ListSchedulesQuery, ListSchedulesQueryVariables>) {
+        return Apollo.useQuery<ListSchedulesQuery, ListSchedulesQueryVariables>(ListSchedulesDocument, baseOptions);
+      }
+export function useListSchedulesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListSchedulesQuery, ListSchedulesQueryVariables>) {
+          return Apollo.useLazyQuery<ListSchedulesQuery, ListSchedulesQueryVariables>(ListSchedulesDocument, baseOptions);
+        }
+export type ListSchedulesQueryHookResult = ReturnType<typeof useListSchedulesQuery>;
+export type ListSchedulesLazyQueryHookResult = ReturnType<typeof useListSchedulesLazyQuery>;
+export type ListSchedulesQueryResult = Apollo.QueryResult<ListSchedulesQuery, ListSchedulesQueryVariables>;
+export const TheaterOptionsDocument = gql`
+    query TheaterOptions($location: String!) {
+  theaterOptions(location: $location) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useTheaterOptionsQuery__
+ *
+ * To run a query within a React component, call `useTheaterOptionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTheaterOptionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTheaterOptionsQuery({
+ *   variables: {
+ *      location: // value for 'location'
+ *   },
+ * });
+ */
+export function useTheaterOptionsQuery(baseOptions?: Apollo.QueryHookOptions<TheaterOptionsQuery, TheaterOptionsQueryVariables>) {
+        return Apollo.useQuery<TheaterOptionsQuery, TheaterOptionsQueryVariables>(TheaterOptionsDocument, baseOptions);
+      }
+export function useTheaterOptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TheaterOptionsQuery, TheaterOptionsQueryVariables>) {
+          return Apollo.useLazyQuery<TheaterOptionsQuery, TheaterOptionsQueryVariables>(TheaterOptionsDocument, baseOptions);
+        }
+export type TheaterOptionsQueryHookResult = ReturnType<typeof useTheaterOptionsQuery>;
+export type TheaterOptionsLazyQueryHookResult = ReturnType<typeof useTheaterOptionsLazyQuery>;
+export type TheaterOptionsQueryResult = Apollo.QueryResult<TheaterOptionsQuery, TheaterOptionsQueryVariables>;

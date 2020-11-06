@@ -17,8 +17,8 @@ const DetailPage: React.FC<Props> = ({ movie }) => {
     isShow, id, name, description, director, producer, duration,
     type: type.split(',').map((type) => GenreOptions.find((genre) => genre.value === type)),
     country: CountryOptions.find((item) => (item.value === country)),
-    thumbnail: [`${thumbnail}`],
-    images: images?.map(({ url }) => (url)) || [],
+    thumbnail: thumbnail,
+    images: images?.map(({ url }) => (url)),
   } as InitialFormMovie);
 
   return (
@@ -29,8 +29,8 @@ const DetailPage: React.FC<Props> = ({ movie }) => {
         </div>
       </div>
 
-      <div className='intro-x p-5 mx-auto' style={{ maxWidth: '1000px' }}>
-        <FormComponent initialForm={initValues} />
+      <div className='intro-x p-5 mx-auto' style={ { maxWidth: '1000px' } }>
+        <FormComponent initialForm={ initValues } />
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Calendar,
   Search,
@@ -10,8 +10,12 @@ import Select from 'react-select';
 import Table from 'components/Table';
 import { TableItem } from 'interfaces';
 import { cinemaOptions } from 'helper/constant';
+import { formatDate, formatTime } from 'helper/functions';
+
+import { useListSchedulesQuery } from 'graphql/generated';
 
 const cols = ['thumbnail', 'name', 'during', 'session', 'room']
+
 const dataEx: TableItem[] = [
   {
     id: 1,
@@ -34,13 +38,32 @@ const dataEx: TableItem[] = [
 ]
 
 const ScheduleContainer = () => {
-  const [data, setData] = useState(dataEx);
-  const [filter, setFilter] = useState({
-    orderNumber: '',
-    productName: '',
-    date: new Date('8/17/2020'),
-  });
+  const [dataTable, setData] = useState<any>([]);
+  const [date, setFilter] = useState(new Date());
   const [cinema, setCinema] = useState('');
+
+  const { data } = useListSchedulesQuery({
+    variables: {
+      data: {
+        date: formatDate(date),
+        location: cinema,
+      }
+    }
+  });
+
+  useEffect(() => {
+    const mapper = data?.ListSchedules.map((item) => ({
+      id: item.id,
+      name: item.movie?.name,
+      subName: 'Queen Rambit',
+      images: [`${item.movie?.thumbnail}`],
+      session: formatTime(item.time),
+      room: item.theater?.name,
+      during: item.movie?.duration,
+    }));
+
+    setData(mapper);
+  }, [data]);
 
   return (
     <>
@@ -72,8 +95,8 @@ const ScheduleContainer = () => {
           </div>
           <DatePicker
             className='input border ml-1 w-32 z-50 mr-10'
-            selected={ filter.date }
-            onChange={ (date: any) => setFilter({ ...filter, date }) }
+            selected={ date }
+            onChange={ (date: any) => setFilter(date) }
           />
 
           <div className="w-auto">
@@ -87,7 +110,7 @@ const ScheduleContainer = () => {
         </div>
 
         <div className="intro-y col-span-12">
-          <Table Cols={ cols } Data={ data } type={ 'schedule' } />
+          <Table Cols={ cols } Data={ dataTable } type={ 'schedule' } />
         </div>
       </div>
     </>
