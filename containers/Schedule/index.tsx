@@ -13,36 +13,16 @@ import { cinemaOptions } from 'helper/constant';
 import { formatDate, formatTime } from 'helper/functions';
 
 import { useListSchedulesQuery } from 'graphql/generated';
+import Loading from 'components/Loading';
 
 const cols = ['thumbnail', 'name', 'during', 'session', 'room']
-
-const dataEx: TableItem[] = [
-  {
-    id: 1,
-    name: 'King',
-    subName: 'King Lion',
-    images: ['', '', ''],
-    session: '12:00',
-    room: 'first',
-    during: 164,
-  },
-  {
-    id: 2,
-    name: 'Queen',
-    subName: 'Queen Rambit',
-    images: ['', '', ''],
-    session: '22:00',
-    room: 'second',
-    during: 164,
-  }
-]
 
 const ScheduleContainer = () => {
   const [dataTable, setData] = useState<any>([]);
   const [date, setFilter] = useState(new Date());
   const [cinema, setCinema] = useState('');
 
-  const { data } = useListSchedulesQuery({
+  const { data, loading } = useListSchedulesQuery({
     variables: {
       data: {
         date: formatDate(date),
@@ -82,8 +62,8 @@ const ScheduleContainer = () => {
           <div className='ml-auto w-64 z-40'>
             <Select
               placeholder="Choose Cinema"
-              options={ cinemaOptions }
-              onChange={ (c) => {
+              options={cinemaOptions}
+              onChange={(c) => {
                 setCinema(c?.['value']);
               }
               }
@@ -95,8 +75,8 @@ const ScheduleContainer = () => {
           </div>
           <DatePicker
             className='input border ml-1 w-32 z-50 mr-10'
-            selected={ date }
-            onChange={ (date: any) => setFilter(date) }
+            selected={date}
+            onChange={(date: any) => setFilter(date)}
           />
 
           <div className="w-auto">
@@ -106,13 +86,20 @@ const ScheduleContainer = () => {
               <Search className="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" />
             </div>
           </div>
-
         </div>
 
         <div className="intro-y col-span-12">
-          <Table Cols={ cols } Data={ dataTable } type={ 'schedule' } />
+          <Table Cols={cols} Data={dataTable} type={'schedule'} />
         </div>
       </div>
+
+      {
+        loading && (
+          <div className='absolute' style={{ top: 10, left: '50%' }}>
+            <Loading />
+          </div>
+        )
+      }
     </>
   );
 };

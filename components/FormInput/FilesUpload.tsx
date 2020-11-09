@@ -17,7 +17,7 @@ const FileUpload: React.FC<Props> = (props) => {
     const files = e.target.files;
 
     for (let i = 0; i < files?.length; i++) {
-      const image = await resizeFile(files[0]);
+      const image = await resizeFile(files[i]);
       value.push(image);
     }
     setValue([...new Set(value)]);
@@ -29,18 +29,18 @@ const FileUpload: React.FC<Props> = (props) => {
 
   return (
     <div className='mb-3'>
-      <label>{ props.label }: </label>
-      <input type="file" onChange={ handleOnChange } multiple={ true } formEncType='multipart/form-data' name={ props.name } />
+      <label>{props.label}: </label>
+      <input type="file" onChange={handleOnChange} multiple={true} formEncType='multipart/form-data' name={props.name} />
       {
         value?.length > 0 && (
-          <div className='p-5 my-3 overflow-hidden bg-gray-300 grid gap-3 grid-cols-12 mx-auto' style={ { maxWidth: '1000px', maxHeight: '500px' } }>
+          <div className='p-5 my-3 overflow-hidden bg-gray-300 grid gap-3 grid-cols-12 mx-auto' style={{ maxWidth: '1000px', maxHeight: '500px' }}>
             {
               value.map((img, index) => (
-                <div key={ index } className='col-span-4 relative'>
-                  <button onClick={ () => handleRemove(img) } type='button'
+                <div key={index} className='col-span-4 relative'>
+                  <button onClick={() => handleRemove(img)} type='button'
                     className='absolute top-0 right-0 text-white'><X />
                   </button>
-                  <img src={ img } className='object-center w-full rounded-md' />
+                  <img src={img} className='object-center w-full rounded-md' />
                 </div>
               ))
             }

@@ -1,5 +1,5 @@
 * {
-    @for $i from 1 through 10 {
+    @for $i from 1 through 20 {
         > .intro-x:nth-child(#{$i}) {
             // z-index: #{10 - $i};
             @apply opacity-0 relative;

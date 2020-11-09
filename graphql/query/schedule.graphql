@@ -4,6 +4,7 @@ query Schedule ($id: Int!) {
       id
       time
       location
+      price
       scheduleDate {
         date
       }

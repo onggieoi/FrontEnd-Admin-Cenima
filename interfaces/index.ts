@@ -51,4 +51,5 @@ export interface InitialFormSchedule {
   movieId: number;
   movie: string;
   location: string;
+  price: number;
 }

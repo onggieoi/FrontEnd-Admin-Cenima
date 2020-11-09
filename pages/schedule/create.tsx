@@ -18,7 +18,7 @@ const CreatePage = () => {
         </div>
         </div>
 
-        <div className='p-5 mx-auto' style={ { maxWidth: '1000px' } }>
+        <div className='p-5 mx-auto' style={{ maxWidth: '1500px' }}>
           <FormComponent />
         </div>
       </Layout>

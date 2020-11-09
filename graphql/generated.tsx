@@ -149,6 +149,21 @@ export type SeatRespone = {
   isAvailable?: Maybe<Scalars['Boolean']>;
 };
 
+export type GeneralReportRespone = {
+  __typename?: 'GeneralReportRespone';
+  users: Scalars['Int'];
+  movies: Scalars['Int'];
+  total: Scalars['Int'];
+};
+
+export type Transactions = {
+  __typename?: 'Transactions';
+  user: Scalars['String'];
+  location: Scalars['String'];
+  creditCardNumber: Scalars['Int'];
+  price: Scalars['Int'];
+};
+
 export type ScheduleRespone = {
   __typename?: 'ScheduleRespone';
   schedule?: Maybe<ScheduleTime>;
@@ -208,6 +223,7 @@ export type CreateMovieInput = {
 };
 
 export type CreateScheduleInput = {
+  id?: Maybe<Scalars['Int']>;
   date: Scalars['String'];
   location: Scalars['String'];
   theaterId: Scalars['Int'];
@@ -232,6 +248,8 @@ export type Query = {
   movie: ResponeMovie;
   getTimesSession: Array<ScheduleTime>;
   seats: Array<SeatRespone>;
+  generalReport: GeneralReportRespone;
+  transactions: Array<Transactions>;
   movies: Array<Movie>;
   ListSchedules: Array<ScheduleTime>;
   schedule?: Maybe<ScheduleRespone>;
@@ -332,6 +350,16 @@ export type CreateMovieMutation = (
   & Pick<Mutation, 'createMovie'>
 );
 
+export type CreateScheduleMutationVariables = Exact<{
+  data: CreateScheduleInput;
+}>;
+
+
+export type CreateScheduleMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createSchedule'>
+);
+
 export type DeleteMovieMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -367,6 +395,17 @@ export type SignInMutation = (
       & Pick<ErrorType, 'field' | 'message'>
     )> }
   )> }
+);
+
+export type GeneralReportQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GeneralReportQuery = (
+  { __typename?: 'Query' }
+  & { generalReport: (
+    { __typename?: 'GeneralReportRespone' }
+    & Pick<GeneralReportRespone, 'movies' | 'total' | 'users'>
+  ) }
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -447,7 +486,7 @@ export type ScheduleQuery = (
     & Pick<ScheduleRespone, 'error'>
     & { schedule?: Maybe<(
       { __typename?: 'ScheduleTime' }
-      & Pick<ScheduleTime, 'id' | 'time' | 'location'>
+      & Pick<ScheduleTime, 'id' | 'time' | 'location' | 'price'>
       & { scheduleDate: (
         { __typename?: 'ScheduleDate' }
         & Pick<ScheduleDate, 'date'>
@@ -495,6 +534,17 @@ export type TheaterOptionsQuery = (
   )> }
 );
 
+export type TransactionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TransactionsQuery = (
+  { __typename?: 'Query' }
+  & { transactions: Array<(
+    { __typename?: 'Transactions' }
+    & Pick<Transactions, 'user' | 'location' | 'price' | 'creditCardNumber'>
+  )> }
+);
+
 
 export const CreateMovieDocument = gql`
     mutation CreateMovie($data: CreateMovieInput!) {
@@ -526,6 +576,36 @@ export function useCreateMovieMutation(baseOptions?: Apollo.MutationHookOptions<
 export type CreateMovieMutationHookResult = ReturnType<typeof useCreateMovieMutation>;
 export type CreateMovieMutationResult = Apollo.MutationResult<CreateMovieMutation>;
 export type CreateMovieMutationOptions = Apollo.BaseMutationOptions<CreateMovieMutation, CreateMovieMutationVariables>;
+export const CreateScheduleDocument = gql`
+    mutation CreateSchedule($data: CreateScheduleInput!) {
+  createSchedule(data: $data)
+}
+    `;
+export type CreateScheduleMutationFn = Apollo.MutationFunction<CreateScheduleMutation, CreateScheduleMutationVariables>;
+
+/**
+ * __useCreateScheduleMutation__
+ *
+ * To run a mutation, you first call `useCreateScheduleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateScheduleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createScheduleMutation, { data, loading, error }] = useCreateScheduleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateScheduleMutation(baseOptions?: Apollo.MutationHookOptions<CreateScheduleMutation, CreateScheduleMutationVariables>) {
+        return Apollo.useMutation<CreateScheduleMutation, CreateScheduleMutationVariables>(CreateScheduleDocument, baseOptions);
+      }
+export type CreateScheduleMutationHookResult = ReturnType<typeof useCreateScheduleMutation>;
+export type CreateScheduleMutationResult = Apollo.MutationResult<CreateScheduleMutation>;
+export type CreateScheduleMutationOptions = Apollo.BaseMutationOptions<CreateScheduleMutation, CreateScheduleMutationVariables>;
 export const DeleteMovieDocument = gql`
     mutation DeleteMovie($id: Int!) {
   deleteMovie(id: $id)
@@ -625,6 +705,40 @@ export function useSignInMutation(baseOptions?: Apollo.MutationHookOptions<SignI
 export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
 export type SignInMutationResult = Apollo.MutationResult<SignInMutation>;
 export type SignInMutationOptions = Apollo.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
+export const GeneralReportDocument = gql`
+    query GeneralReport {
+  generalReport {
+    movies
+    total
+    users
+  }
+}
+    `;
+
+/**
+ * __useGeneralReportQuery__
+ *
+ * To run a query within a React component, call `useGeneralReportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGeneralReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGeneralReportQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGeneralReportQuery(baseOptions?: Apollo.QueryHookOptions<GeneralReportQuery, GeneralReportQueryVariables>) {
+        return Apollo.useQuery<GeneralReportQuery, GeneralReportQueryVariables>(GeneralReportDocument, baseOptions);
+      }
+export function useGeneralReportLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GeneralReportQuery, GeneralReportQueryVariables>) {
+          return Apollo.useLazyQuery<GeneralReportQuery, GeneralReportQueryVariables>(GeneralReportDocument, baseOptions);
+        }
+export type GeneralReportQueryHookResult = ReturnType<typeof useGeneralReportQuery>;
+export type GeneralReportLazyQueryHookResult = ReturnType<typeof useGeneralReportLazyQuery>;
+export type GeneralReportQueryResult = Apollo.QueryResult<GeneralReportQuery, GeneralReportQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -795,6 +909,7 @@ export const ScheduleDocument = gql`
       id
       time
       location
+      price
       scheduleDate {
         date
       }
@@ -914,3 +1029,38 @@ export function useTheaterOptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type TheaterOptionsQueryHookResult = ReturnType<typeof useTheaterOptionsQuery>;
 export type TheaterOptionsLazyQueryHookResult = ReturnType<typeof useTheaterOptionsLazyQuery>;
 export type TheaterOptionsQueryResult = Apollo.QueryResult<TheaterOptionsQuery, TheaterOptionsQueryVariables>;
+export const TransactionsDocument = gql`
+    query Transactions {
+  transactions {
+    user
+    location
+    price
+    creditCardNumber
+  }
+}
+    `;
+
+/**
+ * __useTransactionsQuery__
+ *
+ * To run a query within a React component, call `useTransactionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTransactionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTransactionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTransactionsQuery(baseOptions?: Apollo.QueryHookOptions<TransactionsQuery, TransactionsQueryVariables>) {
+        return Apollo.useQuery<TransactionsQuery, TransactionsQueryVariables>(TransactionsDocument, baseOptions);
+      }
+export function useTransactionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TransactionsQuery, TransactionsQueryVariables>) {
+          return Apollo.useLazyQuery<TransactionsQuery, TransactionsQueryVariables>(TransactionsDocument, baseOptions);
+        }
+export type TransactionsQueryHookResult = ReturnType<typeof useTransactionsQuery>;
+export type TransactionsLazyQueryHookResult = ReturnType<typeof useTransactionsLazyQuery>;
+export type TransactionsQueryResult = Apollo.QueryResult<TransactionsQuery, TransactionsQueryVariables>;

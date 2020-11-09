@@ -29,15 +29,15 @@ const MovieDetail = () => {
   return (
     <>
       <Head>
-        <title>title schedule | UNKNOWN</title>
+        <title>{data?.schedule?.schedule?.movie?.name} | UNKNOWN</title>
       </Head>
 
       <Layout>
         {
           state ? (
-            <DetailPage schedule={ data?.schedule?.schedule } />
+            <DetailPage schedule={data?.schedule?.schedule} />
           ) : (
-              <div className='absolute' style={ { top: 10, left: '50%' } }>
+              <div className='absolute' style={{ top: 10, left: '50%' }}>
                 <Loading />
               </div>
             )

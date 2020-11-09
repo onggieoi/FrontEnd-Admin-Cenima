@@ -8,7 +8,7 @@ type Props = {
 }
 
 const DetailPage: React.FC<Props> = ({ schedule }) => {
-  const { id, time, scheduleDate, theater, movie, location } = schedule;
+  const { id, time, scheduleDate, theater, movie, location, price } = schedule;
 
   const [initValues] = useState({
     id, location,
@@ -18,6 +18,7 @@ const DetailPage: React.FC<Props> = ({ schedule }) => {
     theaterId: theater.id,
     movieId: movie.id,
     movie: movie.name,
+    price: price,
   } as InitialFormSchedule);
 
   return (
@@ -28,8 +29,8 @@ const DetailPage: React.FC<Props> = ({ schedule }) => {
         </div>
       </div>
 
-      <div className='p-5 mx-auto' style={ { width: '1500px' } }>
-        <FormComponent initialForm={ initValues } />
+      <div className='p-5 mx-auto' style={{ width: '1500px' }}>
+        <FormComponent initialForm={initValues} />
       </div>
     </>
   );

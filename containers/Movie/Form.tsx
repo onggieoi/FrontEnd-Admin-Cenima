@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Formik } from 'formik';
+import { NotificationManager } from 'react-notifications';
 
 import TextField from 'components/FormInput/Text';
 import TextareaField from 'components/FormInput/Textarea';
@@ -11,7 +12,6 @@ import Switch from 'components/FormInput/Switch';
 import { GenreOptions, CountryOptions } from 'helper/constant';
 import { DataType, InitialFormMovie } from 'interfaces';
 import { useCreateMovieMutation } from 'graphql/generated';
-import { NotificationManager } from 'react-notifications';
 import { useRouter } from 'next/router';
 
 const initialValues = {
@@ -37,8 +37,8 @@ const FormComponent: React.FC<Props> = ({ initialForm }) => {
 
   return (
     <Formik
-      initialValues={ initialForm || initialValues }
-      onSubmit={ (values, actions) => {
+      initialValues={initialForm || initialValues}
+      onSubmit={(values, actions) => {
         actions.setSubmitting(true);
 
         setTimeout(async () => {
@@ -75,30 +75,30 @@ const FormComponent: React.FC<Props> = ({ initialForm }) => {
           }
           actions.setSubmitting(false);
         }, 1000);
-      } }
+      }}
     >
       {({ isSubmitting }) => (
-        <Form className='flex flex-col'>
+        <Form className='flex flex-col border border-theme-100 p-5 rounded-lg shadow-lg intro-x'>
           <div className='flex mx-auto'>
             <Switch name='isShow' label='Showing' />
           </div>
           <TextField name="name" type="text" label="Name" />
           <TextareaField name="description" type="text" label="Description" />
-          <MultiSelect name='type' label='Genre' data={ GenreOptions } isMulti={ true } />
+          <MultiSelect name='type' label='Genre' data={GenreOptions} isMulti={true} />
           <TextField name="director" type="text" label="Director" />
           <TextField name="producer" type="text" label="Producer" />
-          <MultiSelect name='country' label='Country' data={ CountryOptions } isMulti={ false } />
+          <MultiSelect name='country' label='Country' data={CountryOptions} isMulti={false} />
           <TextField name="duration" type="number" label="Duration" />
           <FileUpload label="Thumbnail" name="thumbnail" />
           <FilesUpload label="Images" name="images" />
 
-          <button type="submit" disabled={ isSubmitting }
+          <button type="submit" disabled={isSubmitting}
             className="button inline-block bg-theme-100 text-white py-3 px-5 mt-5 rounded-md shadow-lg font-bold">
             Submit
-            { isSubmitting && <img src="/oval.svg" className='w-4 h-4 ml-2 inline-block' /> }
+            {isSubmitting && <img src="/oval.svg" className='w-4 h-4 ml-2 inline-block' />}
           </button>
         </Form>
-      ) }
+      )}
     </Formik>
   );
 };

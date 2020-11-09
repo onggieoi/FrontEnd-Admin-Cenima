@@ -43,6 +43,11 @@ body {
   }
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
 .bg-sweet {
   background: rgb(252, 210, 250);
   background: linear-gradient(0deg, rgba(252, 210, 250, 0.5) 0%, rgba(249, 123, 242, 0.5) 30%, rgba(247, 229, 245, 0.5) 100%);
