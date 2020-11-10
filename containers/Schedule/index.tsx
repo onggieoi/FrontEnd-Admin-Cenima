@@ -26,7 +26,7 @@ const ScheduleContainer = () => {
     variables: {
       data: {
         date: formatDate(date),
-        location: cinema,
+        location: cinema || undefined,
       }
     }
   });

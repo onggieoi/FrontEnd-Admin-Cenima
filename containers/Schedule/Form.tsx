@@ -83,9 +83,6 @@ const FormComponent: React.FC<Props> = ({ initialForm }) => {
   const handleSubmit = () => {
     setLoading(true);
 
-    console.log(time.getTime().toString());
-
-
     setTimeout(() => {
       createSchedule({
         variables: {
@@ -206,12 +203,15 @@ const FormComponent: React.FC<Props> = ({ initialForm }) => {
       {
         sessions?.ListSchedules.length ? (
           <div className='col-span-1 flex-col flex gap-5 border border-theme-50 rounded-md shadow-lg p-5'>
+            <div className='intro-y'>Already schedules</div>
             {
-              sessions?.ListSchedules.map(({ time, id }) => (
+              sessions?.ListSchedules.map(({ time, id, movie, theater }) => (
                 <Link key={id} href={`/schedule/${id}`}>
                   <div className='intro-y w-full bg-theme-100 py-5 text-center text-white 
                     font-bold text-lg rounded-md shadow-xl cursor-pointer'>
-                    {formatTime(time)}
+                    <div className='text-2xl'>Time: {formatTime(time)}</div>
+                    <div>Theater: {theater?.name}</div>
+                    <div>Movie: {movie?.name}</div>
                   </div>
                 </Link>
               ))
