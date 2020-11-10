@@ -37,12 +37,12 @@ const Transaction = () => {
                 justify-center items-center rounded-md shadow-md zoom-in'>
               {/* Info */}
               <div className='mr-auto ml-5'>
-                <div className='text-xl font-bold'>{item.user}</div>
-                <div>Credit Card Number: {item.creditCardNumber}</div>
+                <div className='text-xl font-bold max-w-xl'>{item.user}</div>
+                <div>{new Date(item.date).toLocaleString()}</div>
                 <div>From {item.location}</div>
               </div>
               {/* Money */}
-              <div className='ml-auto mr-5 text-theme-9 font-bold text-2xl'>+ {item.price} $</div>
+              <div className='ml-auto mr-5 text-theme-9 font-bold text-2xl inline-block'>+ {item.price} $</div>
             </div>
           ))
         }

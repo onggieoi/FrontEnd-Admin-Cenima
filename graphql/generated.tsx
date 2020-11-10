@@ -71,7 +71,9 @@ export type Ticket = {
   seatId: Scalars['Int'];
   scheduleTimeId: Scalars['Int'];
   customerId: Scalars['Int'];
+  createAt: Scalars['DateTime'];
 };
+
 
 export type Seat = {
   __typename?: 'Seat';
@@ -104,7 +106,6 @@ export type Test = {
   createAt: Scalars['DateTime'];
   updateAt: Scalars['DateTime'];
 };
-
 
 export type User = {
   __typename?: 'User';
@@ -160,7 +161,13 @@ export type Transactions = {
   __typename?: 'Transactions';
   user: Scalars['String'];
   location: Scalars['String'];
-  creditCardNumber: Scalars['Int'];
+  date: Scalars['DateTime'];
+  price: Scalars['Int'];
+};
+
+export type Chart = {
+  __typename?: 'Chart';
+  month: Scalars['String'];
   price: Scalars['Int'];
 };
 
@@ -250,6 +257,7 @@ export type Query = {
   seats: Array<SeatRespone>;
   generalReport: GeneralReportRespone;
   transactions: Array<Transactions>;
+  chart: Array<Chart>;
   movies: Array<Movie>;
   ListSchedules: Array<ScheduleTime>;
   schedule?: Maybe<ScheduleRespone>;
@@ -397,6 +405,17 @@ export type SignInMutation = (
   )> }
 );
 
+export type ChartQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ChartQuery = (
+  { __typename?: 'Query' }
+  & { chart: Array<(
+    { __typename?: 'Chart' }
+    & Pick<Chart, 'month' | 'price'>
+  )> }
+);
+
 export type GeneralReportQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -541,7 +560,7 @@ export type TransactionsQuery = (
   { __typename?: 'Query' }
   & { transactions: Array<(
     { __typename?: 'Transactions' }
-    & Pick<Transactions, 'user' | 'location' | 'price' | 'creditCardNumber'>
+    & Pick<Transactions, 'user' | 'location' | 'price' | 'date'>
   )> }
 );
 
@@ -705,6 +724,39 @@ export function useSignInMutation(baseOptions?: Apollo.MutationHookOptions<SignI
 export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
 export type SignInMutationResult = Apollo.MutationResult<SignInMutation>;
 export type SignInMutationOptions = Apollo.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
+export const ChartDocument = gql`
+    query Chart {
+  chart {
+    month
+    price
+  }
+}
+    `;
+
+/**
+ * __useChartQuery__
+ *
+ * To run a query within a React component, call `useChartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useChartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useChartQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useChartQuery(baseOptions?: Apollo.QueryHookOptions<ChartQuery, ChartQueryVariables>) {
+        return Apollo.useQuery<ChartQuery, ChartQueryVariables>(ChartDocument, baseOptions);
+      }
+export function useChartLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChartQuery, ChartQueryVariables>) {
+          return Apollo.useLazyQuery<ChartQuery, ChartQueryVariables>(ChartDocument, baseOptions);
+        }
+export type ChartQueryHookResult = ReturnType<typeof useChartQuery>;
+export type ChartLazyQueryHookResult = ReturnType<typeof useChartLazyQuery>;
+export type ChartQueryResult = Apollo.QueryResult<ChartQuery, ChartQueryVariables>;
 export const GeneralReportDocument = gql`
     query GeneralReport {
   generalReport {
@@ -1035,7 +1087,7 @@ export const TransactionsDocument = gql`
     user
     location
     price
-    creditCardNumber
+    date
   }
 }
     `;

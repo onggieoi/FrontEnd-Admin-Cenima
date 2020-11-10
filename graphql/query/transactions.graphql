@@ -3,6 +3,6 @@ query Transactions {
     user
     location
     price
-    creditCardNumber
+    date
   }
 }
