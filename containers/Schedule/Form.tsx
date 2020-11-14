@@ -29,7 +29,7 @@ const FormComponent: React.FC<Props> = ({ initialForm }) => {
 
   const [time, setTime] = useState(() => {
     if (initialForm?.time) {
-      return new Date(123456);
+      return new Date(initialForm?.time);
     }
     return new Date();
   });
@@ -87,6 +87,7 @@ const FormComponent: React.FC<Props> = ({ initialForm }) => {
       createSchedule({
         variables: {
           data: {
+            id: initialForm?.id,
             date: formatDate(date),
             location: cinema?.value || 'hochiminh',
             time: time.getTime().toString(),
